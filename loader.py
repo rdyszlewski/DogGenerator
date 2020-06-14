@@ -1,8 +1,13 @@
 import os
+import sys
 import xml.etree.ElementTree as ET
 
 from models import DogImage, ImageObject
 from PIL import Image
+from multiprocessing.pool import Pool
+
+from utils.threads import ThreadsUtils
+
 
 class ImageLoader:
 
@@ -23,15 +28,37 @@ class ImageLoader:
     def __load_images_data(self, directory_path):
         annotation_path = directory_path + '/Annotation'
         images_path = directory_path + '/all-dogs'
-
-        imagesData = []
         breeds_directories = os.listdir(annotation_path)
+
+        parameters = self.__prepare_parameters(annotation_path, breeds_directories, images_path)
+        result = self.__start_loading_data(parameters)
+        return result
+
+
+
+    def __start_loading_data(self, parameters):
+        # TODO: ustawić jakieś mądre ustawianie wątków. Duże prawdopodobieństwo, że braknie pamięci
+        threads = ThreadsUtils.get_available_threads()
+        with Pool(processes=threads) as pool:
+            loading_results = pool.map(self._load_images, parameters)
+        concatenated_result = sum(loading_results, [])
+        return concatenated_result
+
+    def __prepare_parameters(self, annotation_path, breeds_directories, images_path):
+        parameters = []
         for directory_name in breeds_directories:
             path = annotation_path + '/' + directory_name
-            for filename in os.listdir(path):
-                filepath = path + "/" + filename
-                dogImage = self.__load_annotation_file(filepath, images_path)
-                imagesData.append(dogImage)
+            parameters.append((path, images_path))
+        return parameters
+
+    def _load_images(self, parameters):
+        path = parameters[0]
+        images_path = parameters[1]
+        imagesData = []
+        for filename in os.listdir(path):
+            filepath = path + "/" + filename
+            dogImage = self.__load_annotation_file(filepath, images_path)
+            imagesData.append(dogImage)
         return imagesData
 
 
@@ -39,7 +66,6 @@ class ImageLoader:
         if os.path.isfile(path):
             image = Image.open(path)
             return image
-
 
     def __load_annotation_file(self, path, images_path):
         root = ET.parse(path).getroot()

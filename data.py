@@ -1,16 +1,16 @@
 import os
 
+import numpy
+
 from image import ImageUtils
 from loader import ImageLoader
+from utils.encoding import OneHotEncoder
 
 
 class DataPreparator:
 
-    WIDTH = 128
-    HEIGHT = 128
-
     @staticmethod
-    def prepare_data(path):
+    def prepare_data(path, width, height):
         loader = ImageLoader()
         imagesData = loader.load(path)
 
@@ -20,9 +20,19 @@ class DataPreparator:
             for obj in data.objects:
                 if data.data:
                     image = ImageUtils.crop(data.data, obj.minX, obj.minY, obj.maxX, obj.minY)
-                    image = ImageUtils.resize(image, DataPreparator.WIDTH, DataPreparator.HEIGHT)
-                    # TODO: tutaj jakoś pobrać dane
-                    images.append(image.getdata())
+                    image = ImageUtils.resize(image, width, height)
+                    image_array = numpy.array(image)
+                    # TODO przerobić to jako tablica
+                    images.append(image_array)
                     breeds.append(obj.name)
 
+        breeds = DataPreparator.__prepare_labels(breeds)
         return images, breeds
+
+    @staticmethod
+    def __prepare_labels(labels):
+        # TODO: zwrócić
+        # encoder = MultiLabelBinarizer()
+        encoder = OneHotEncoder()
+        encoded_labels = encoder.encode(labels)
+        return encoded_labels # TODO: zrobić zapis encodera
