@@ -8,7 +8,8 @@ class Plot:
         noise = np.random.normal(loc=0, scale=1, size=[examples, 100]) # TODO: tutaj jest rozmiar wejścia
         generated_images = generator.predict(noise)
         # generated_images = generated_images.reshape(100, 28, 28) # TODO: zobaczyć skąd ten rozmiar
-        generated_images = generated_images.reshape(examples, 128, 128, 3)  # TODO: powprowadzać jakieś stałe
+        generated_images = generated_images.reshape(examples, 64, 64, 3)  # TODO: powprowadzać jakieś stałe
+        # generated_images = (generated_images + 1) / 2
         plt.figure(figsize=figsize)
         for i in range(generated_images.shape[0]):
             plt.subplot(dim[0], dim[1], i + 1)

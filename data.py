@@ -23,12 +23,15 @@ class DataPreparator:
                     image = ImageUtils.crop(data.data, obj.minX, obj.minY, obj.maxX, obj.maxY)
                     image = ImageUtils.resize(image, width, height)
                     image_array = numpy.array(image)
+                    del image
                     # TODO przerobić to jako tablica
                     images.append(image_array)
                     breeds.append(obj.name)
-        #         del obj
-        #     del data
-        # del imagesData
+                del obj
+            if data.data:
+                del data.data
+            del data
+        del imagesData
         gc.collect()
         breeds = DataPreparator.__prepare_labels(breeds)
         return numpy.array(images), numpy.array(breeds)

@@ -25,7 +25,7 @@ class SimpleBatchTrainer(Trainer):
             for _ in tqdm(range(batch_size)):
                 self._train_discriminator(discriminator, generator, x_train, batch_size)
                 self._train_gan(gan, discriminator, batch_size)
-            if e == 1 or e % 20 == 0:
+            if e == 1 or e % 5 == 0:
                 Plot.plot_generated_images(e, generator)
 
     def _train_discriminator(self, discriminator, generator, x_train, batch_size):
