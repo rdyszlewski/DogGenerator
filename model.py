@@ -11,45 +11,48 @@ class Discriminator:
         alpha = 0.2
 
         model = Sequential()
-        model.add(Conv2D(depth, 2, input_shape=input_shape, padding='same'))
-        model.add(LeakyReLU(alpha))
-        model.add(Dropout(dropout))
+        Discriminator.__add_conv_layer(model, depth, alpha, dropout, input_shape)
+        Discriminator.__add_conv_layer(model, depth * 2, alpha, dropout)
+        Discriminator.__add_conv_layer(model, depth * 4, alpha, dropout)
+        Discriminator.__add_conv_layer(model, depth * 8, alpha, dropout)
+        Discriminator.__add_output(model)
 
-        model.add(Conv2D(depth * 2, 2))
-        model.add(LeakyReLU(alpha))
-        model.add(Dropout(dropout))
-
-        model.add(Conv2D(depth * 4, 2))
-        model.add(LeakyReLU(alpha))
-        model.add(Dropout(dropout))
-
-        model.add(Conv2D(depth * 8, 2))
-        model.add(LeakyReLU(alpha))
-        model.add(Dropout(dropout))
-
-        model.add(Flatten())
-        model.add(Dense(1))
-        model.add(Activation('sigmoid'))
-
-        model.summary()
         return model
 
+    @staticmethod
+    def __add_conv_layer(model, units,  alpha, dropout, input_shape=None):
+        if input_shape:
+            model.add(Conv2D(units, 2, input_shape=input_shape, padding='same'))
+        else:
+            model.add(Conv2D(units * 2, 2))
+        model.add(LeakyReLU(alpha))
+        model.add(Dropout(dropout))
+
+    @staticmethod
+    def __add_output(model):
+        model.add(Flatten())
+        model.add(Dense(1))
+        # model.add(Dense(116))
+        model.add(Activation('sigmoid'))
 
 class Generator:
 
     @staticmethod
     def create_model(input_shape, depth):
+        # TODO: refaktoryzacja
+        depth = depth * 8
         dropout = 0.4
         model = Sequential()
-        dim = 7
+        dim = 32 # TODO; będzie to trzeba jakoś odpowiednio podać w parametrze
         momentum = 0.9
         # TODO: sprawdzić, skąd bierze się ta wartość
-        model.add(Dense(dim * dim * depth, input_dim=100))
+        model.add(Dense(dim * dim * depth, input_dim=100)) # TODO: to też powinno być w parametrze
         model.add(BatchNormalization(momentum=momentum))
         model.add(Activation('relu'))
         model.add(Reshape((dim, dim, depth)))
         model.add(Dropout(dropout))
 
+        # model.add(UpSampling2D(size=(4,4)))
         model.add(UpSampling2D())
         model.add(Conv2DTranspose(int(depth/2), 5, padding='same'))
         model.add(BatchNormalization(momentum=momentum))
@@ -58,14 +61,14 @@ class Generator:
         model.add(Conv2DTranspose(int(depth/4),5, padding='same'))
         model.add(BatchNormalization(momentum=momentum))
         model.add(Activation('relu'))
-        model.add(Conv2DTranspose(int(depth/8), 5, padding='same'))
-        model.add(BatchNormalization(momentum=momentum))
-        model.add(Activation('relu'))
+        # model.add(Conv2DTranspose(int(depth/8), 5, padding='same'))
+        # model.add(BatchNormalization(momentum=momentum))
+        # model.add(Activation('relu'))
 
         # TODO: sprawdzić, czy nie będzie trzeba zmienić tej jedynki
-        model.add(Conv2DTranspose(1, 5, padding='same'))
+        model.add(Conv2DTranspose(3, 5, padding='same'))
         model.add(Activation('sigmoid'))
-        model.summary()
+        # model.summary()
 
         return model
 

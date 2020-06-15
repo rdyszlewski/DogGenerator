@@ -42,6 +42,8 @@ class ImageLoader:
         with Pool(processes=threads) as pool:
             loading_results = pool.map(self._load_images, parameters)
         concatenated_result = sum(loading_results, [])
+        for element in loading_results:
+            del element
         return concatenated_result
 
     def __prepare_parameters(self, annotation_path, breeds_directories, images_path):
