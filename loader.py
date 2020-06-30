@@ -38,7 +38,8 @@ class ImageLoader:
 
     def __start_loading_data(self, parameters):
         # TODO: ustawić jakieś mądre ustawianie wątków. Duże prawdopodobieństwo, że braknie pamięci
-        threads = ThreadsUtils.get_available_threads()
+        # threads = ThreadsUtils.get_available_threads()
+        threads = 12
         with Pool(processes=threads) as pool:
             loading_results = pool.map(self._load_images, parameters)
         concatenated_result = sum(loading_results, [])

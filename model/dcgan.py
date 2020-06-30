@@ -1,6 +1,8 @@
 from keras import Input, Model
 from keras.layers import Conv2D, BatchNormalization, LeakyReLU, GlobalAveragePooling2D, Dense, Deconvolution2D, Reshape
 
+from trainers.config import TrainerConfig
+
 
 class Discriminator:
 
@@ -36,7 +38,7 @@ class Generator:
     @staticmethod
     def create_model(input_shape, depth):
         filter_size = 5
-        latent_dim = 100 # TODO: wstawić to do stełej
+        latent_dim = TrainerConfig.noise_size # TODO: wstawić to do stełej
         inp = Input(shape=(latent_dim,))
 
         # projection of the noise vector into a tensor with

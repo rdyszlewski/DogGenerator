@@ -1,19 +1,20 @@
-from data import DataPreparator
-from trainers.gan_trainer import GanTrainer
-from trainers.simple_batch import SimpleBatchTrainer
+from data.saver import DataSaver
+from trainers.config import TrainerConfig
+from trainers.gan_trainer2 import GanTrainer2
 
 data_path = "/media/roman/07765B7E452A5B73/Machine Learning/Dogs"
 
 def main():
-    # input_shape = (128, 128, 3)
-    input_shape = (64, 64, 3)
-    data, labels = DataPreparator.prepare_data(data_path, input_shape[0], input_shape[1])
-    trainer = SimpleBatchTrainer()
-    # trainer = GanTrainer()
-    trainer.train(data, labels, input_shape)
+    # __create_batches()
+    __train()
 
 
+def __train():
+    trainer = GanTrainer2()
+    trainer.train(None, None, TrainerConfig.input_shape)
 
+def __create_batches():
+    DataSaver.save_data(data_path, TrainerConfig.data_path, TrainerConfig.input_shape, 1024)
 
 
 main()
