@@ -47,13 +47,17 @@ class GanTrainer2(Trainer):
         return x_train
 
     def __train_discriminator(self, discriminator, generator, x_train, iteration):
-        discriminator_iterations = 5
+        discriminator_iterations = 2
         discriminator.trainable = True
         for i in range(discriminator_iterations):
             x_train = shuffle(x_train)
-            x, y = self.__prepare_data_for_discriminator(generator, x_train, TrainerConfig.batch_size, iteration)
-            discriminator.train_on_batch(x, y)
-            del x, y
+            # x, y = self.__prepare_data_for_discriminator(generator, x_train, TrainerConfig.batch_size, iteration)
+            # discriminator.train_on_batch(x, y)
+            train_data, generated_images = self.__prepare_data_for_discriminator(generator, x_train, TrainerConfig.batch_size, iteration)
+            discriminator.train_on_batch(train_data, np.array([0.9]*train_data.shape[0]))
+            discriminator.train_on_batch(generated_images, np.zeros(train_data.shape[0]))
+            del train_data, generated_images
+            # del x, y
         # discriminator.fit(x, y, batch_size= TrainerConfig.batch_size, verbose=1)
 
     def __prepare_data_for_discriminator(self, generator, x_train, batch_size, iteration):
@@ -61,10 +65,26 @@ class GanTrainer2(Trainer):
         generated_images = generator.predict(noise)
         # real_images = x_train[np.random.randint(low=0, high=x_train.shape[0], size=examples)]
         train_data = self.__split_train_data(x_train, iteration, batch_size)
-        x = np.concatenate([train_data, generated_images])
-        y = self._get_y_for_discriminator_train(train_data.shape[0])
-        x, y = shuffle(x, y)
-        return x, y
+        # x = np.concatenate([train_data, generated_images])
+        # x = self.__add_noise_to_image(x) # TODO: sprawdzić, jak to będzie działało, później można usunąć
+        # y = self._get_y_for_discriminator_train(train_data.shape[0])
+        # x, y = shuffle(x, y)
+        # return x, y
+        return train_data, generated_images
+
+    def __add_noise_to_image(self, data):
+        # TODO: dla każdego obrazka dodać szum
+        result_data = []
+        shape = TrainerConfig.input_shape
+        for image in data:
+            # noise = np.random.randint(5, size = TrainerConfig.input_shape, dtype = 'uint8')
+            noise = np.random.normal(0, 0.1, size=TrainerConfig.input_shape)
+            for i in range(shape[0]):
+                for j in range(shape[1]):
+                    for k in range(shape[2]):
+                        if (image[i][j][k] != 255):
+                            image[i][j][k] += noise[i][j][k]
+        return data
 
     def __split_train_data(self, x_train, iteration, batch_size):
         start_index = batch_size * iteration
@@ -79,7 +99,7 @@ class GanTrainer2(Trainer):
 
     def _get_y_for_discriminator_train(self, batch_size):
         y = np.zeros(2 * batch_size)
-        y[:batch_size] = 1
+        y[:batch_size] = 0.9
         return y
 
     def _train_gan(self, gan, discriminator, iteration):

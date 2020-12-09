@@ -50,7 +50,8 @@ class Trainer:
         return discriminator
 
     def _create_generator(self, noise_shape, depth):
-        generator = Generator.create_model(noise_shape, depth)
+        # TODO: przejrzeć się temu. To chyba nie jest noise_shape
+        generator = Generator.create_model(noise_shape, depth, TrainerConfig.noise_size)
         return generator
 
     def _create_gan(self, discriminator, generator):
