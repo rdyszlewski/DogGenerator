@@ -9,5 +9,3 @@ class ILoader(abc.ABC):
     @abc.abstractmethod
     def load(self, load_prepared:bool=False):
         pass
-
-    @abc.abstractmethod

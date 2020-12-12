@@ -1,73 +1,40 @@
-import abc
-import gc
-import os
+from tqdm import tqdm
 
-from tensorflow.keras import Input, Model
-from tensorflow.keras.optimizers import Adam
-from sklearn.model_selection import train_test_split
-from sklearn.utils import shuffle
+from data.loaders.loader import DataLoader
+from data.loaders.prepared_loader import PreparedDataLoader
+from plot import Plot
+from trainers.discriminator_trainer import DiscriminatorTrainer
+from trainers.gan_trainer import GanTrainer
+from trainers.initializator.model_initializator import ModelInitializator
 
-from model.dcgan4 import Discriminator, Generator
-from trainers.config import TrainerConfig
-import yaml
 
 class Trainer:
 
-    def __init__(self):
-        os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+    def __init__(self, config):
+        super().__init__()
+        self._config = config
+        self._discriminator_label_weight = config["train"]["discriminator_labels_weight"]
+        self._loader: DataLoader = PreparedDataLoader(config)
+        self._discriminator_trainer: DiscriminatorTrainer = DiscriminatorTrainer(self._discriminator_label_weight, config, self._loader)
+        self._gan_trainer: GanTrainer = GanTrainer(config)
 
-    @abc.abstractmethod
-    def train(self, data, labels, input_shape):
-        pass
+    def train(self):
+        # input_shape = ShapeParser.parse(self._config["model"]["discriminator"]["input_shape"])
+        generator, discriminator, gan = ModelInitializator.prepare_models(self._config)
+        self.__standard_train(generator, discriminator, gan, self._config)
 
-    def _prepare_models(self, input_shape):
-        # discriminator = self._create_discriminator(input_shape, TrainerConfig.depth)
-        # generator = self._create_generator(input_shape,
-        #                                    TrainerConfig.depth)
+    def __standard_train(self, generator, discriminator, gan, config):
+        epochs = config["train"]["epochs"]
+        save_result_interval = config["train"]["save_result_interval"]
+        for epoch in range(epochs):
+            print("Epoch %d" % epoch)
+            self.__train_epoch(generator, discriminator, gan, config)
+            if epochs % save_result_interval == 0:
+                Plot.plot_generated_images(epoch, generator)
 
-        with open("configuration/configuration.yaml") as file:
-            config = yaml.safe_load(file)
-        discriminator = Discriminator.create_model(config["model"]["discriminator"])
-        discriminator.trainable = True
-        generator = Generator.create_model(config["model"]["generator"])
-
-        gan = self._create_gan(discriminator, generator)
-        return discriminator, gan, generator
-
-    def _prepare_data(self, data, labels):
-        data, labels = shuffle(data, labels)
-        x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.25, random_state=42)
-        x_train, y_train = shuffle(x_train, y_train)
-        x_train, x_test = self.__standarize_data(x_train, x_test)
-
-        del data, labels
-        gc.collect()
-        return x_train, x_test, y_train, y_test
-
-    def __standarize_data(self, x_train, x_test):
-        x_train = (x_train - 127.5) / 127.5
-        x_test = (x_test - 127.5) / 127.5
-        return x_train, x_test
-
-    # def _create_discriminator(self, input_shape, depth):
-    #
-    #     discriminator = Discriminator.create_model(input_shape, depth)
-    #     discriminator.trainable = True
-    #     # TODO: w tym momencie można zrobić kompilacje modelu
-    #     return discriminator
-    #
-    # def _create_generator(self, noise_shape, depth):
-    #     # TODO: przejrzeć się temu. To chyba nie jest noise_shape
-    #     # generator = Generator.create_model(noise_shape, depth, TrainerConfig.noise_size)
-    #     generator = Generator.create_model(noise_shape, depth)
-    #     return generator
-
-    def _create_gan(self, discriminator, generator):
-        discriminator.trainable = False
-        gan_input = Input(shape=(100,))
-        x = generator(gan_input)
-        gan_output = discriminator(x)
-        gan = Model(inputs=gan_input, outputs=gan_output)
-        gan.compile(loss='binary_crossentropy', optimizer = Adam(lr = 0.0002, beta_1 = 0.5))
-        return gan
+    def __train_epoch(self, generator, discriminator, gan, config):
+        for _ in tqdm(range(self._loader.get_size()-1)):
+            self._discriminator_trainer.train(discriminator, generator)
+            self._gan_trainer.train(gan, discriminator)
+            self._loader.next_epoch()
 

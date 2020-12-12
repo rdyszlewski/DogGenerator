@@ -48,4 +48,22 @@ train:
   save_result_interval: 10
   discriminator_iterations: 2
   discriminator_labels_weight: 0.9
+  discriminator:
+    labels_weight: 0.9
+    optimizer: adam
+    learning_rate: 0.0002
+    beta: 0.5
+    loss: binary_crossentropy
+  generator:
+    optimizer: adam
+    learning_rate: 0.0002
+    beta: 0.5
+    loss: binary_crossentropy
+  gan:
+    optimizer: adam
+    learning_rate: 0.0002
+    beta: 0.5
+    loss: binary_crossentropy
+
+
 
