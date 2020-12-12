@@ -1,7 +1,8 @@
 dataset:
-  data_path: /mnt/07765B7E452A5B73/Machine Learning/Dogs
+  data_path: /mnt/07765B7E452A5B73/Machine Learning/Dogs/
   prepared_data_path: /mnt/07765B7E452A5B73/Machine Learning/Dogs/processing
   prepared_data: False
+  prepared_data_size: 1024
 output:
   output_path: ./output
   output_images_path: ./output/images
@@ -13,7 +14,7 @@ model:
     activation: leakRelu(0.2)
     dropout: 0.2
     auto_add_layers: conv
-    kernel_size: 3
+    kernel_size: 4
     depth: 128
     strides: 2
     input_shape: (64,64,3)
@@ -27,7 +28,7 @@ model:
     activation: relu
     dropout: -1
     auto_add_layers: conv
-    kernel_size: 3
+    kernel_size: 4
     depth: 128
     input_shape: 100
     layers: >
@@ -43,8 +44,9 @@ model:
       conv(1);
 
 train:
+  loader: prepared
   epochs: 1000
-  batch_size: 16
+  batch_size: 32
   save_result_interval: 10
   discriminator_iterations: 2
   discriminator_labels_weight: 0.9

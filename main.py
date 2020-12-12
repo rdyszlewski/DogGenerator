@@ -12,12 +12,6 @@ def main():
     # __create_batches()
     __train()
 
-    # with open(configuration_path) as f:
-    #     configuration = yaml.full_load(f)
-    # model_builder = ModelBuilder()
-    # print(configuration)
-    # result = model_builder.build(configuration["model"]["discriminator"])
-
 
 def __train():
     with open(configuration_path) as file:
@@ -27,6 +21,5 @@ def __train():
 
 def __create_batches():
     DataSaver.save_data(data_path, TrainerConfig.data_path, TrainerConfig.input_shape, 1024)
-
 
 main()
