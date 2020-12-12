@@ -16,8 +16,8 @@ class PreparedDataLoader(DataLoader):
         self.__data_list = []
         for name in files_names:
             self.__data_list.append(data_path + '/' + name)
-        self.__batch_in_data = math.floor(prepared_data_size / self.__batch_size)
-        # self.__batch_in_data = 1
+        # self.__batch_in_data = math.floor(prepared_data_size / self.__batch_size)
+        self.__batch_in_data = 1
         self.__data_iterator = -1
         self.__current_data = None
         self.__current_labels = None
@@ -32,7 +32,7 @@ class PreparedDataLoader(DataLoader):
         x = self.__current_data[start_index: end_index]
         labels = self.__current_data[start_index: end_index]
         x, labels = shuffle(x, labels)
-        self.__data_iterator+=1
+        self.__data_iterator += 1
         return x, labels
 
     def _load_next_data(self):
@@ -48,4 +48,5 @@ class PreparedDataLoader(DataLoader):
 
     def next_epoch(self):
         self._iteration = -1
+        self.__data_iterator = -1
         self.__data_list = shuffle(self.__data_list)

@@ -44,26 +44,26 @@ model:
       conv(1);
 
 train:
-  loader: prepared
+  loader: generator
   epochs: 1000
-  batch_size: 32
+  batch_size: 16
   save_result_interval: 10
   discriminator_iterations: 2
   discriminator_labels_weight: 0.9
   discriminator:
     labels_weight: 0.9
     optimizer: adam
-    learning_rate: 0.0002
+    learning_rate: 0.0001
     beta: 0.5
     loss: binary_crossentropy
   generator:
     optimizer: adam
-    learning_rate: 0.0002
+    learning_rate: 0.0001
     beta: 0.5
     loss: binary_crossentropy
   gan:
     optimizer: adam
-    learning_rate: 0.0002
+    learning_rate: 0.0001
     beta: 0.5
     loss: binary_crossentropy
 

@@ -36,8 +36,6 @@ class Trainer:
                 Plot.plot_generated_images(epoch, generator)
 
     def __train_epoch(self, generator, discriminator, gan):
-        print("Rozmiar")
-        print(self._loader.get_size()-1)
         for _ in tqdm(range(self._loader.get_size()-1)):
             self._discriminator_trainer.train(discriminator, generator)
             self._gan_trainer.train(gan, discriminator)
