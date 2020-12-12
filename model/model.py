@@ -1,5 +1,5 @@
-from keras import Input, Model, Sequential
-from keras.layers import Dense, Reshape, concatenate, Conv2D, Flatten, LeakyReLU, Dropout, Activation, \
+from tensorflow.keras import Input, Model, Sequential
+from tensorflow.keras import Dense, Reshape, concatenate, Conv2D, Flatten, LeakyReLU, Dropout, Activation, \
     BatchNormalization, UpSampling2D, Conv2DTranspose
 import numpy as np
 

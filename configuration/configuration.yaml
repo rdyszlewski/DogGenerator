@@ -1,0 +1,45 @@
+dataset:
+  data_path: /media/roman/07765B7E452A5B73/Machine Learning/Dogs
+  prepared_data_path: /media/roman/07765B7E452A5B73/Machine Learning/Dogs
+  prepared_data: False
+output:
+  output_path: ./output
+  output_images_path: ./output/images
+
+model:
+  #  TODO: zastanowić się, czy to jest potrzebne
+  file: .model/dcgan2.py
+  discriminator:
+    activation: leakRelu(0.2)
+    dropout: 0.2
+    auto_add_layers: conv
+    kernel_size: 3
+    depth: 128
+    strides: 2
+    input_shape: (64,64,3)
+    layers: >
+      conv(1);
+      conv(2);
+      conv(4);
+      conv(8);
+
+  generator:
+    activation: relu
+    dropout: -1
+    auto_add_layers: conv
+    kernel_size: 3
+    depth: 128
+    input_shape: 100
+    layers: >
+      dense(128);
+      reshape(4, 4, 8);
+      upscaling();
+      conv(8);
+      upscaling();
+      conv(4);
+      upscaling();
+      conv(2);
+      upscaling();
+      conv(1);
+
+train:

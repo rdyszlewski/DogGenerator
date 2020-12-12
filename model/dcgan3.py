@@ -1,7 +1,7 @@
-from keras import Sequential
-from keras.initializers import RandomNormal
-from keras.layers import Dense, Reshape, UpSampling2D, Conv2D, ReLU, LeakyReLU, Dropout, Flatten, BatchNormalization
-from keras.optimizers import Adam
+from tensorflow.keras import Sequential
+from tensorflow.keras.initializers import RandomNormal
+from tensorflow.keras.layers import Dense, Reshape, UpSampling2D, Conv2D, ReLU, LeakyReLU, Dropout, Flatten, BatchNormalization
+from tensorflow.keras.optimizers import Adam
 
 # TODO: wstawić jakiś plik z ustawieniami
 from trainers.config import TrainerConfig

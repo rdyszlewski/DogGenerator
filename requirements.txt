@@ -2,5 +2,5 @@ numpy
 pillow
 scikit-learn
 matplotlib
-keras
-tensorflow
+tf-nightly-gpu
+tqdm

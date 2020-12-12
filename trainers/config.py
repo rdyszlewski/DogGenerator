@@ -10,5 +10,5 @@ class TrainerConfig:
     input_shape = (64, 64, 3)
     noise_size = 100
 
-    data_path = '/media/roman/07765B7E452A5B73/Machine Learning/Dogs/processing'
+    data_path = '/mnt/07765B7E452A5B73/Machine Learning/Dogs/processing'
     output_path = 'output/gan_generated_image %d.png'
