@@ -1,7 +1,6 @@
 import re
 
 from tensorflow.keras.layers import Dropout
-from tensorflow.keras.initializers import RandomNormal
 from tensorflow.keras import Sequential
 
 from model.builder.activation_parser import ActivationParser

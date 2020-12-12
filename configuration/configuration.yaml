@@ -1,6 +1,6 @@
 dataset:
-  data_path: /media/roman/07765B7E452A5B73/Machine Learning/Dogs
-  prepared_data_path: /media/roman/07765B7E452A5B73/Machine Learning/Dogs
+  data_path: /mnt/07765B7E452A5B73/Machine Learning/Dogs
+  prepared_data_path: /mnt/07765B7E452A5B73/Machine Learning/Dogs/processing
   prepared_data: False
 output:
   output_path: ./output
@@ -43,3 +43,9 @@ model:
       conv(1);
 
 train:
+  epochs: 1000
+  batch_size: 16
+  save_result_interval: 10
+  discriminator_iterations: 2
+  discriminator_labels_weight: 0.9
+

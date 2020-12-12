@@ -5,7 +5,6 @@ from tensorflow.keras.layers import Reshape
 
 from model.builder.shared import LayersPattern
 
-
 class LayerParser:
 
     def __init__(self, depth:int, kernel_size:int, strides: int, input_shape):
