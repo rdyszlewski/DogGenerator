@@ -14,7 +14,7 @@ class ModelInitializator:
         gan = Gan.create_model(discriminator, generator, config)
 
         ModelInitializator._init_model(discriminator, "discriminator", config)
-        ModelInitializator._init_model(generator, "generator", config)
+        # ModelInitializator._init_model(generator, "generator", config)
         ModelInitializator._init_model(gan, "gan", config)
 
         return generator, discriminator, gan

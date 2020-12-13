@@ -11,6 +11,7 @@ class Plot:
         # TODO: dodać rozmiary obrazków do ustawień
         noise_size = config["model"]["generator"]["input_shape"]
         input_shape = ShapeParser.parse(config["model"]["discriminator"]["input_shape"])
+        output_path = config["output"]["output_path"]
         noise = np.random.normal(loc=0, scale=1, size=[examples, noise_size])
         generated_images = generator.predict(noise)
         generated_images = generated_images.reshape(examples, *input_shape)
@@ -22,6 +23,6 @@ class Plot:
             plt.imshow(generated_images[i], interpolation='nearest')
             plt.axis('off')
         plt.tight_layout()
-        plt.savefig(TrainerConfig.output_path % epoch)
+        plt.savefig(output_path+ "/" + str(epoch))
         plt.close()
         del generated_images, noise

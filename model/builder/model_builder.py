@@ -2,6 +2,7 @@ import re
 
 from tensorflow.keras.layers import Dropout
 from tensorflow.keras import Sequential
+from tensorflow.python.keras.layers import BatchNormalization
 
 from model.builder.activation_parser import ActivationParser
 from model.builder.layer_parser import LayerParser
@@ -46,6 +47,8 @@ class ModelBuilder:
             if layer:
                 self._model.add(layer)
                 if name in self._auto_add_layers:
+                    if("conv" in layers_text):
+                        self._model.add(BatchNormalization())
                     if self._activation:
                         self._model.add(self._activation_parser.get_activation())
                     if self._dropout > 0:

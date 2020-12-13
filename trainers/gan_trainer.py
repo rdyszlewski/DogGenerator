@@ -7,9 +7,8 @@ class GanTrainer:
         self.__batch_size = self.__config["train"]["batch_size"]
         self.__noise_size = self.__config["model"]["generator"]["input_shape"]
 
-    def train(self, gan, discriminator):
+    def train(self, gan):
         noise, y_gen = self._prepare_data_for_gan_training()
-        discriminator.trainable = False
         gan.train_on_batch(noise, y_gen)
         del noise, y_gen
 

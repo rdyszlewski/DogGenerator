@@ -27,12 +27,14 @@ class Trainer:
         for epoch in range(epochs):
             print("Epoch %d" % epoch)
             self.__train_epoch(generator, discriminator, gan)
-            if epochs % save_result_interval == 0:
+            if epoch % save_result_interval == 0:
                 Plot.plot_generated_images(epoch, generator, config)
 
     def __train_epoch(self, generator, discriminator, gan):
         for _ in tqdm(range(self._loader.get_size()-1)):
+            discriminator.trainable = True
             self._discriminator_trainer.train(discriminator, generator)
-            self._gan_trainer.train(gan, discriminator)
+            discriminator.trainable = False
+            self._gan_trainer.train(gan)
             self._loader.next_epoch()
 
