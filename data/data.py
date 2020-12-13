@@ -2,8 +2,8 @@ import gc
 
 import numpy
 
-from image import ImageUtils
-from loader import ImageLoader
+from data.image import ImageUtils
+from data.image_loader import ImageLoader
 from utils.encoding import OneHotEncoder
 
 

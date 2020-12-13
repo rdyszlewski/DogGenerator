@@ -1,6 +1,6 @@
 import click
 import yaml
-
+import os
 from data.saver import DataSaver
 from model.builder.shape_parser import ShapeParser
 from trainers.trainer import Trainer
@@ -9,6 +9,7 @@ from trainers.trainer import Trainer
 @click.group()
 @click.option('--config_path')
 def train(config_path: str):
+    os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
     with open(config_path) as file:
         configuration = yaml.safe_load(file)
     trainer = Trainer(configuration)

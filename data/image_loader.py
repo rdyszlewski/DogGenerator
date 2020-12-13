@@ -1,12 +1,9 @@
 import os
-import sys
 import xml.etree.ElementTree as ET
 
-from models import DogImage, ImageObject
+from data.models import DogImage, ImageObject
 from PIL import Image
 from multiprocessing.pool import Pool
-
-from utils.threads import ThreadsUtils
 
 
 class ImageLoader:

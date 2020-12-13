@@ -1,6 +1,6 @@
-from tensorflow.keras.optimizers import Adam
-
-from model.dcgan4 import Generator, Discriminator, Gan
+from model.discriminator import Discriminator
+from model.gan import Gan
+from model.generator import Generator
 from trainers.initializator.optimizer_parser import OptimizerParser
 
 
@@ -26,5 +26,3 @@ class ModelInitializator:
         optimizer = OptimizerParser.get_optimizer(configuration)
         model.compile(loss=loss, optimizer=optimizer)
         model.summary()
-
-

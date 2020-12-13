@@ -1,17 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from trainers.config import TrainerConfig
+from model.builder.shape_parser import ShapeParser
 
 
 class Plot:
 
     @staticmethod
-    def plot_generated_images(epoch, generator, examples=25, dim=(5, 5), figsize=(20, 20)):
+    def plot_generated_images(epoch, generator, config, examples=25, dim=(5, 5), figsize=(20, 20)):
         # TODO: dodać rozmiary obrazków do ustawień
-        noise = np.random.normal(loc=0, scale=1, size=[examples, TrainerConfig.noise_size])
+        noise_size = config["model"]["generator"]["input_shape"]
+        input_shape = ShapeParser.parse(config["model"]["discriminator"]["input_shape"])
+        noise = np.random.normal(loc=0, scale=1, size=[examples, noise_size])
         generated_images = generator.predict(noise)
-        generated_images = generated_images.reshape(examples, *TrainerConfig.input_shape)
+        generated_images = generated_images.reshape(examples, *input_shape)
 
         generated_images = (generated_images + 1) / 2
         plt.figure(figsize=figsize)
