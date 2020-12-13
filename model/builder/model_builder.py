@@ -47,9 +47,9 @@ class ModelBuilder:
             if layer:
                 self._model.add(layer)
                 if name in self._auto_add_layers:
-                    if("conv" in layers_text):
-                        self._model.add(BatchNormalization())
-                    if self._activation:
+                    # if "conv" in layers_text:
+                    #     self._model.add(BatchNormalization())
+                    if self._activation_parser.get_activation() is not None:
                         self._model.add(self._activation_parser.get_activation())
                     if self._dropout > 0:
                         self._model.add(Dropout(self._dropout))

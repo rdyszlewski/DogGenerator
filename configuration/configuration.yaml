@@ -14,8 +14,8 @@ model:
     activation: leakRelu(0.2)
     dropout: 0.2
     auto_add_layers: conv
-    kernel_size: 5
-    depth: 128
+    kernel_size: 3
+    depth: 98
     strides: 2
     input_shape: (64,64,3)
     layers: >
@@ -28,8 +28,8 @@ model:
     activation: relu
     dropout: -1
     auto_add_layers: conv
-    kernel_size: 5
-    depth: 128
+    kernel_size: 3
+    depth: 98
     input_shape: 100
     layers: >
       dense(128);
@@ -46,23 +46,23 @@ model:
 train:
   loader: prepared
   epochs: 1000
-  batch_size: 16
+  batch_size: 256
   save_result_interval: 1
   discriminator:
     iterations: 2
     labels_weight: 0.9
     optimizer: adam
-    learning_rate: 0.0001
+    learning_rate: 0.0002
     beta: 0.5
     loss: binary_crossentropy
   generator:
     optimizer: adam
-    learning_rate: 0.0001
+    learning_rate: 0.0002
     beta: 0.5
     loss: binary_crossentropy
   gan:
     optimizer: adam
-    learning_rate: 0.0001
+    learning_rate: 0.0002
     beta: 0.5
     loss: binary_crossentropy
 

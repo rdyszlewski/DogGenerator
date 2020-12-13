@@ -9,13 +9,12 @@ class ModelInitializator:
     @staticmethod
     def prepare_models(config):
         discriminator = Discriminator.create_model(config["model"]["discriminator"])
-        discriminator.trainable = True
-        generator = Generator.create_model(config["model"]["generator"])
-        gan = Gan.create_model(discriminator, generator, config)
-
         ModelInitializator._init_model(discriminator, "discriminator", config)
-        # ModelInitializator._init_model(generator, "generator", config)
+        generator = Generator.create_model(config["model"]["generator"])
+        ModelInitializator._init_model(generator, "generator", config)
+        gan = Gan.create_model(discriminator, generator, config)
         ModelInitializator._init_model(gan, "gan", config)
+
 
         return generator, discriminator, gan
 

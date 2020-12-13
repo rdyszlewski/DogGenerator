@@ -16,8 +16,8 @@ class PreparedDataLoader(DataLoader):
         self.__data_list = []
         for name in files_names:
             self.__data_list.append(data_path + '/' + name)
-        # self.__batch_in_data = math.floor(prepared_data_size / self.__batch_size)
-        self.__batch_in_data = 1
+        self.__batch_in_data = math.floor(prepared_data_size / self.__batch_size)
+        # self.__batch_in_data = 1
         self.__data_iterator = -1
         self.__current_data = None
         self.__current_labels = None
