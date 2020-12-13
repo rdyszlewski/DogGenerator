@@ -4,6 +4,7 @@ from trainers.trainer import  Trainer
 import yaml
 import os
 
+
 data_path = "/media/roman/07765B7E452A5B73/Machine Learning/Dogs"
 configuration_path ="configuration/configuration.yaml"
 

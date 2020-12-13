@@ -37,8 +37,6 @@ class DataPreparator:
 
     @staticmethod
     def __prepare_labels(labels):
-        # TODO: zwrócić
-        # encoder = MultiLabelBinarizer()
         encoder = OneHotEncoder()
         encoded_labels = encoder.encode(labels)
         return encoded_labels # TODO: zrobić zapis encodera

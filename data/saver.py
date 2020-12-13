@@ -28,11 +28,3 @@ class DataSaver:
         pickle.dump(data, open(output_path, 'wb'))
 
 
-class DataLoader:
-
-    @staticmethod
-    def load_data(path):
-        data = pickle.load(open(path, 'rb'))
-        return data[0], data[1]
-
-
